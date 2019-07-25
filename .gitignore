@@ -1,0 +1,25 @@
+# Static libraries
+*.a
+*.lib
+
+# Executables
+*.exe
+
+# DUB
+.dub
+docs.json
+dub.selections.json
+__dummy.html
+__test__library__
+tests
+docs/
+
+# Code coverage
+*.lst
+
+# Backup files
+*~
+
+# Editor files
+.vs
+
