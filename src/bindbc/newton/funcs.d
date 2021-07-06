@@ -180,17 +180,22 @@ extern(C) @nogc nothrow
     alias da_NewtonMaterialGetContactMaxNormalImpact = dFloat function(const NewtonMaterial* material);
     alias da_NewtonMaterialGetContactMaxTangentImpact = dFloat function(const NewtonMaterial* material, int index);
     alias da_NewtonMaterialGetContactPenetration = dFloat function(const NewtonMaterial* material);
+    alias da_NewtonMaterialSetAsSoftContact = void function (const NewtonMaterial* material, dFloat relaxation);
+
     alias da_NewtonMaterialSetContactSoftness = void function(const NewtonMaterial* material, dFloat softness);
     alias da_NewtonMaterialSetContactThickness = void function(const NewtonMaterial* material, dFloat thickness);
     alias da_NewtonMaterialSetContactElasticity = void function(const NewtonMaterial* material, dFloat restitution);
     alias da_NewtonMaterialSetContactFrictionState = void function(const NewtonMaterial* material, int state, int index);
     alias da_NewtonMaterialSetContactFrictionCoef = void function(const NewtonMaterial* material, dFloat staticFrictionCoef, dFloat kineticFrictionCoef, int index);
+
     alias da_NewtonMaterialSetContactNormalAcceleration = void function(const NewtonMaterial* material, dFloat accel);
     alias da_NewtonMaterialSetContactNormalDirection = void function(const NewtonMaterial* material, const dFloat* directionVector);
     alias da_NewtonMaterialSetContactPosition = void function(const NewtonMaterial* material, const dFloat* position);
+
     alias da_NewtonMaterialSetContactTangentFriction = void function(const NewtonMaterial* material, dFloat friction, int index);
     alias da_NewtonMaterialSetContactTangentAcceleration = void function(const NewtonMaterial* material, dFloat accel, int index);
     alias da_NewtonMaterialContactRotateTangentDirections = void function(const NewtonMaterial* material, const dFloat* directionVector);
+
     alias da_NewtonMaterialGetContactPruningTolerance = dFloat function(const NewtonBody* body0, const NewtonBody* body1);
     alias da_NewtonMaterialSetContactPruningTolerance = void function(const NewtonBody* body0, const NewtonBody* body1, dFloat tolerance);
 
@@ -204,13 +209,17 @@ extern(C) @nogc nothrow
     alias da_NewtonCreateChamferCylinder = NewtonCollision* function(const NewtonWorld* newtonWorld, dFloat radius, dFloat height, int shapeID, const dFloat* offsetMatrix);
     alias da_NewtonCreateConvexHull = NewtonCollision* function(const NewtonWorld* newtonWorld, int count, const dFloat* vertexCloud, int strideInBytes, dFloat tolerance, int shapeID, const dFloat* offsetMatrix);
     alias da_NewtonCreateConvexHullFromMesh = NewtonCollision* function(const NewtonWorld* newtonWorld, const NewtonMesh* mesh, dFloat tolerance, int shapeID);
+
     alias da_NewtonCollisionGetMode = int function(const NewtonCollision* convexCollision);
     alias da_NewtonCollisionSetMode = void function(const NewtonCollision* convexCollision, int mode);
+
     alias da_NewtonConvexHullGetFaceIndices = int function(const NewtonCollision* convexHullCollision, int face, int* faceIndices);
     alias da_NewtonConvexHullGetVertexData = int function(const NewtonCollision* convexHullCollision, dFloat** vertexData, int* strideInBytes);
+
     alias da_NewtonConvexCollisionCalculateVolume = dFloat function(const NewtonCollision* convexCollision);
     alias da_NewtonConvexCollisionCalculateInertialMatrix = void function(const(NewtonCollision)* convexCollision, dFloat* inertia, dFloat* origin);
-    //alias da_NewtonConvexCollisionCalculateBuoyancyAcceleration = void function(const NewtonCollision* convexCollision, const dFloat* matrix, const dFloat* shapeOrigin, const dFloat* gravityVector, const dFloat* fluidPlane, dFloat fluidDensity, dFloat fluidViscosity, dFloat* accel, dFloat* alpha);
+    alias da_NewtonConvexCollisionCalculateBuoyancyVolume = dFloat function (const NewtonCollision*  convexCollision, const dFloat* matrix, const dFloat* fluidPlane, dFloat* centerOfBuoyancy);
+
     alias da_NewtonCollisionDataPointer = const(void)* function(const NewtonCollision* convexCollision);
 
     // Compound collision primitives creation
@@ -774,6 +783,7 @@ __gshared
     da_NewtonMaterialGetContactMaxNormalImpact NewtonMaterialGetContactMaxNormalImpact;
     da_NewtonMaterialGetContactMaxTangentImpact NewtonMaterialGetContactMaxTangentImpact;
     da_NewtonMaterialGetContactPenetration NewtonMaterialGetContactPenetration;
+    da_NewtonMaterialSetAsSoftContact NewtonMaterialSetAsSoftContact;
     da_NewtonMaterialSetContactSoftness NewtonMaterialSetContactSoftness;
     da_NewtonMaterialSetContactThickness NewtonMaterialSetContactThickness;
     da_NewtonMaterialSetContactElasticity NewtonMaterialSetContactElasticity;
@@ -803,7 +813,7 @@ __gshared
     da_NewtonConvexHullGetVertexData NewtonConvexHullGetVertexData;
     da_NewtonConvexCollisionCalculateVolume NewtonConvexCollisionCalculateVolume;
     da_NewtonConvexCollisionCalculateInertialMatrix NewtonConvexCollisionCalculateInertialMatrix;
-    //da_NewtonConvexCollisionCalculateBuoyancyAcceleration NewtonConvexCollisionCalculateBuoyancyAcceleration;
+    da_NewtonConvexCollisionCalculateBuoyancyVolume NewtonConvexCollisionCalculateBuoyancyVolume;
     da_NewtonCollisionDataPointer NewtonCollisionDataPointer;
 
     da_NewtonCreateCompoundCollision NewtonCreateCompoundCollision;
