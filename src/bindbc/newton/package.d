@@ -27,4 +27,5 @@ DEALINGS IN THE SOFTWARE.
 module bindbc.newton;
 
 public import bindbc.newton.types;
+public import bindbc.newton.funcs;
 public import bindbc.newton.binddynamic;

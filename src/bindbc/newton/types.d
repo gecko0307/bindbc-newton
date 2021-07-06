@@ -29,14 +29,6 @@ private {
     import core.stdc.config;
 }
 
-enum NewtonSupport {
-    noLibrary,
-    badLibrary,
-    newton314
-}
-
-enum newtonSupport = NewtonSupport.newton314;
-
 extern(C):
 
 alias dLong = long;
@@ -54,7 +46,7 @@ enum NEWTON_BROADPHASE_PERSINTENT = 1;
 enum NEWTON_DYNAMIC_BODY = 0;
 enum NEWTON_KINEMATIC_BODY = 1;
 enum NEWTON_DYNAMIC_ASYMETRIC_BODY = 2;
-//	#define NEWTON_DEFORMABLE_BODY 2
+// enum NEWTON_DEFORMABLE_BODY = 2;
 
 enum SERIALIZE_ID_SPHERE = 0;
 enum SERIALIZE_ID_CAPSULE = 1;
@@ -79,17 +71,29 @@ struct NewtonWorld{}
 struct NewtonJoint{}
 struct NewtonMaterial{}
 struct NewtonCollision{}
-struct NewtonInverseDynamics{}
+// struct NewtonInverseDynamics{}
 struct NewtonDeformableMeshSegment{}
-struct NewtonInverseDynamicsEffector{}
+// struct NewtonInverseDynamicsEffector{}
 struct NewtonFracturedCompoundMeshPart{}
+
+union NewtonMaterialData
+{
+	void* m_ptr;
+	dLong m_int;
+	dFloat m_float;
+} 
 
 struct NewtonCollisionMaterial
 {
-	void* m_userData;
-	int m_userId;
-	int m_userFlags;
-	dFloat[8] m_userParam;
+    /*
+    void* m_userData;
+    int m_userId;
+    int m_userFlags;
+    dFloat[8] m_userParam;
+    */
+    dLong m_userId;
+	NewtonMaterialData m_userData;
+	NewtonMaterialData[6] m_userParam;
 }
 
 struct NewtonBoxParam
@@ -167,10 +171,10 @@ struct NewtonHeightFieldCollisionParam
     dFloat m_verticalScale;
     dFloat m_horizonalScale_x;
     dFloat m_horizonalScale_z;
-    dFloat m_horizonalDisplacementScale_x;
-    dFloat m_horizonalDisplacementScale_z;
+    //dFloat m_horizonalDisplacementScale_x;
+    //dFloat m_horizonalDisplacementScale_z;
     void* m_vertialElevation;
-    short* m_horizotalDisplacement;
+    //short* m_horizotalDisplacement;
     char* m_atributes;
 }
 
@@ -182,25 +186,25 @@ struct NewtonSceneCollisionParam
 struct NewtonCollisionInfoRecord
 {
     dFloat[4][4] m_offsetMatrix;
-	NewtonCollisionMaterial m_collisionMaterial;
+    NewtonCollisionMaterial m_collisionMaterial;
     int m_collisionType; // tag id to identify the collision primitive
 
     union
-	{
-		NewtonBoxParam m_box;									
-		NewtonConeParam m_cone;
-		NewtonSphereParam m_sphere;
-		NewtonCapsuleParam m_capsule;
-		NewtonCylinderParam m_cylinder;
-		NewtonChamferCylinderParam m_chamferCylinder;
-		NewtonConvexHullParam m_convexHull;
-		NewtonDeformableMeshParam m_deformableMesh;
-		NewtonCompoundCollisionParam m_compoundCollision;
-		NewtonCollisionTreeParam m_collisionTree;
-		NewtonHeightFieldCollisionParam m_heightField;
-		NewtonSceneCollisionParam m_sceneCollision;
-		dFloat[64] m_paramArray;		    // user define collision can use this to store information
-	}
+    {
+        NewtonBoxParam m_box;
+        NewtonConeParam m_cone;
+        NewtonSphereParam m_sphere;
+        NewtonCapsuleParam m_capsule;
+        NewtonCylinderParam m_cylinder;
+        NewtonChamferCylinderParam m_chamferCylinder;
+        NewtonConvexHullParam m_convexHull;
+        NewtonDeformableMeshParam m_deformableMesh;
+        NewtonCompoundCollisionParam m_compoundCollision;
+        NewtonCollisionTreeParam m_collisionTree;
+        NewtonHeightFieldCollisionParam m_heightField;
+        NewtonSceneCollisionParam m_sceneCollision;
+        dFloat[64] m_paramArray; // user define collision can use this to store information
+    }
 }
 
 struct NewtonJointRecord
@@ -277,20 +281,20 @@ struct NewtonUserContactPoint
 {
     dFloat[4] m_point;
     dFloat[4] m_normal;
-    long m_shapeId0;
-    long m_shapeId1;
+    dLong m_shapeId0;
+    dLong m_shapeId1;
     dFloat m_penetration;
     int[3] m_unused;
 }
 
 struct NewtonImmediateModeConstraint
 {
-	dFloat[8][6] m_jacobian01;
-	dFloat[8][6] m_jacobian10;
-	dFloat[8] m_minFriction;
-	dFloat[8] m_maxFriction;
-	dFloat[8] m_jointAccel;
-	dFloat[8] m_jointStiffness;
+    dFloat[8][6] m_jacobian01;
+    dFloat[8][6] m_jacobian10;
+    dFloat[8] m_minFriction;
+    dFloat[8] m_maxFriction;
+    dFloat[8] m_jointAccel;
+    dFloat[8] m_jointStiffness;
 }
 
 // data structure for interfacing with NewtonMesh
@@ -328,6 +332,9 @@ alias NewtonFreeMemory = void function (void* ptr, int sizeInBytes);
 alias NewtonWorldDestructorCallback = void function (const NewtonWorld* world);
 alias NewtonPostUpdateCallback = void function (const NewtonWorld* world, dFloat timestep);
 
+alias NewtonCreateContactCallback = void function(const NewtonWorld*  newtonWorld, NewtonJoint* contact);
+alias NewtonDestroyContactCallback = void function(const NewtonWorld*  newtonWorld, NewtonJoint* contact);
+
 alias NewtonWorldListenerDebugCallback = void function (const NewtonWorld* world, void* listener, void* debugContext);
 alias NewtonWorldListenerBodyDestroyCallback = void function (const NewtonWorld* world, void* listenerUserData, NewtonBody* body_);
 alias NewtonWorldUpdateListenerCallback = void function (const NewtonWorld* world, void* listenerUserData, dFloat timestep);
@@ -346,7 +353,7 @@ alias NewtonOnJointDeserializationCallback = void function (NewtonBody* body0, N
 
 alias NewtonOnUserCollisionSerializationCallback = void function (void* userData, NewtonSerializeCallback function_, void* serializeHandle);
 
-// user collision callbacks	
+// user collision callbacks    
 alias NewtonUserMeshCollisionDestroyCallback = void function (void* userData);
 alias NewtonUserMeshCollisionRayHitCallback = dFloat function (NewtonUserMeshCollisionRayHitDesc* lineDescData);
 alias NewtonUserMeshCollisionGetCollisionInfo = void function (void* userData, NewtonCollisionInfoRecord* infoRecord);
@@ -381,7 +388,7 @@ alias NewtonTreeCollisionCallback = void function (
     int vertexStrideInBytes);
 
 alias NewtonBodyDestructor = void function (const NewtonBody* body_);
-alias NewtonApplyForceAndTorque = extern(C) void function (const NewtonBody* body_, dFloat timestep, int threadIndex);
+alias NewtonApplyForceAndTorque = void function (const NewtonBody* body_, dFloat timestep, int threadIndex);
 alias NewtonSetTransform = void function (const NewtonBody* body_, const dFloat* matrix, int threadIndex);
 
 alias NewtonIslandUpdate = int function (const NewtonWorld* newtonWorld, const(void)* islandHandle, int bodyCount);
@@ -395,8 +402,8 @@ alias NewtonWorldRayFilterCallback = dFloat function (const NewtonBody* body_, c
 
 alias NewtonOnAABBOverlap = int function (const NewtonJoint* contact, dFloat timestep, int threadIndex);
 alias NewtonContactsProcess = void function (const NewtonJoint* contact, dFloat timestep, int threadIndex);
-//	typedef int  (*NewtonOnAABBOverlap) (const NewtonMaterial* const material, const NewtonBody* const body0, const NewtonBody* const body1, int threadIndex);
-//	typedef int  (*NewtonOnCompoundSubCollisionAABBOverlap) (const NewtonMaterial* const material, const NewtonBody* const body0, const void* const collisionNode0, const NewtonBody* const body1, const void* const collisionNode1, int threadIndex);
+//    typedef int  (*NewtonOnAABBOverlap) (const NewtonMaterial* const material, const NewtonBody* const body0, const NewtonBody* const body1, int threadIndex);
+//    typedef int  (*NewtonOnCompoundSubCollisionAABBOverlap) (const NewtonMaterial* const material, const NewtonBody* const body0, const void* const collisionNode0, const NewtonBody* const body1, const void* const collisionNode1, int threadIndex);
 alias NewtonOnCompoundSubCollisionAABBOverlap = int function (const NewtonJoint* contact, dFloat timestep, const NewtonBody* body0, const void* collisionNode0, const NewtonBody* body1, const void* collisionNode1, int threadIndex);
 alias NewtonOnContactGeneration = int function (const NewtonMaterial* material, const NewtonBody* body0, const NewtonCollision* collision0, const NewtonBody* body1, const NewtonCollision* collision1, NewtonUserContactPoint* contactBuffer, int maxCount, int threadIndex);
 
