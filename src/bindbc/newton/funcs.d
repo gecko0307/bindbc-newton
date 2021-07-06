@@ -751,7 +751,7 @@ __gshared
     da_NewtonConvexHullGetVertexData NewtonConvexHullGetVertexData;
     da_NewtonConvexCollisionCalculateVolume NewtonConvexCollisionCalculateVolume;
     da_NewtonConvexCollisionCalculateInertialMatrix NewtonConvexCollisionCalculateInertialMatrix;
-    da_NewtonConvexCollisionCalculateBuoyancyAcceleration NewtonConvexCollisionCalculateBuoyancyAcceleration;
+    //da_NewtonConvexCollisionCalculateBuoyancyAcceleration NewtonConvexCollisionCalculateBuoyancyAcceleration;
     da_NewtonCollisionDataPointer NewtonCollisionDataPointer;
 
     da_NewtonCreateCompoundCollision NewtonCreateCompoundCollision;
@@ -807,7 +807,7 @@ __gshared
     
     da_NewtonCreateHeightFieldCollision NewtonCreateHeightFieldCollision;
     da_NewtonHeightFieldSetUserRayCastCallback NewtonHeightFieldSetUserRayCastCallback;
-    da_NewtonHeightFieldSetHorizontalDisplacement NewtonHeightFieldSetHorizontalDisplacement;
+    //da_NewtonHeightFieldSetHorizontalDisplacement NewtonHeightFieldSetHorizontalDisplacement;
     da_NewtonCreateTreeCollision NewtonCreateTreeCollision;
     da_NewtonCreateTreeCollisionFromMesh NewtonCreateTreeCollisionFromMesh;
     da_NewtonTreeCollisionSetUserRayCastCallback NewtonTreeCollisionSetUserRayCastCallback;
@@ -871,7 +871,7 @@ __gshared
     da_NewtonBodySetCollidable NewtonBodySetCollidable;
     da_NewtonBodyAddForce NewtonBodyAddForce;
     da_NewtonBodyAddTorque NewtonBodyAddTorque;
-    da_NewtonBodyCalculateInverseDynamicsForce NewtonBodyCalculateInverseDynamicsForce;
+    //da_NewtonBodyCalculateInverseDynamicsForce NewtonBodyCalculateInverseDynamicsForce;
     da_NewtonBodySetCentreOfMass NewtonBodySetCentreOfMass;
     da_NewtonBodySetMassMatrix NewtonBodySetMassMatrix;
     da_NewtonBodySetFullMassMatrix NewtonBodySetFullMassMatrix;
@@ -968,7 +968,7 @@ __gshared
     da_NewtonDestroyJoint NewtonDestroyJoint;
     da_NewtonJointSetDestructor NewtonJointSetDestructor;
     da_NewtonJointIsActive NewtonJointIsActive;
-
+/*
     da_NewtonCreateInverseDynamics NewtonCreateInverseDynamics;
     da_NewtonInverseDynamicsDestroy NewtonInverseDynamicsDestroy;
     da_NewtonInverseDynamicsGetRoot NewtonInverseDynamicsGetRoot;
@@ -983,7 +983,7 @@ __gshared
     da_NewtonInverseDynamicsAddLoopJoint NewtonInverseDynamicsAddLoopJoint;
     da_NewtonInverseDynamicsEndBuild NewtonInverseDynamicsEndBuild;
     da_NewtonInverseDynamicsUpdate NewtonInverseDynamicsUpdate;
-    
+*/
     da_NewtonCreateMassSpringDamperSystem NewtonCreateMassSpringDamperSystem;
     da_NewtonCreateDeformableSolid NewtonCreateDeformableSolid;
     da_NewtonDeformableMeshGetParticleCount NewtonDeformableMeshGetParticleCount;
@@ -1044,16 +1044,16 @@ __gshared
     da_NewtonUserJointAddGeneralRow NewtonUserJointAddGeneralRow;
     da_NewtonUserJointSetRowMinimumFriction NewtonUserJointSetRowMinimumFriction;
     da_NewtonUserJointSetRowMaximumFriction NewtonUserJointSetRowMaximumFriction;
-    da_NewtonUserJointCalculateRowZeroAccelaration NewtonUserJointCalculateRowZeroAccelaration;
+    //da_NewtonUserJointCalculateRowZeroAccelaration NewtonUserJointCalculateRowZeroAccelaration;
     da_NewtonUserJointGetRowAcceleration NewtonUserJointGetRowAcceleration;
     //da_NewtonUserJointSetRowAsInverseDynamics NewtonUserJointSetRowAsInverseDynamics;
     da_NewtonUserJointSetRowAcceleration NewtonUserJointSetRowAcceleration;
-    da_NewtonUserJointSetRowSpringDamperAcceleration NewtonUserJointSetRowSpringDamperAcceleration;
+    //da_NewtonUserJointSetRowSpringDamperAcceleration NewtonUserJointSetRowSpringDamperAcceleration;
     da_NewtonUserJointSetRowStiffness NewtonUserJointSetRowStiffness;
     da_NewtonUserJoinRowsCount NewtonUserJoinRowsCount;
     da_NewtonUserJointGetGeneralRow NewtonUserJointGetGeneralRow;
     da_NewtonUserJointGetRowForce NewtonUserJointGetRowForce;
-    da_NewtonUserJointSubmitImmediateModeConstraint NewtonUserJointSubmitImmediateModeConstraint;
+    //da_NewtonUserJointSubmitImmediateModeConstraint NewtonUserJointSubmitImmediateModeConstraint;
     
     da_NewtonMeshCreate NewtonMeshCreate;
     da_NewtonMeshCreateFromMesh NewtonMeshCreateFromMesh;
