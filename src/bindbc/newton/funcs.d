@@ -34,12 +34,17 @@ extern(C) @nogc nothrow
     alias da_NewtonWorldFloatSize = int function();
     alias da_NewtonGetMemoryUsed = int function();
     alias da_NewtonSetMemorySystem = void function(NewtonAllocMemory malloc, NewtonFreeMemory free);
+
     alias da_NewtonCreate = NewtonWorld* function();
     alias da_NewtonDestroy = void function(const NewtonWorld* newtonWorld);
     alias da_NewtonDestroyAllBodies = void function(const NewtonWorld* newtonWorld);
-    //alias da_NewtonSetPosUpdateCallback = void function(const NewtonWorld* newtonWorld, NewtonPostUpdateCallback callback);
+
+    alias da_NewtonGetPostUpdateCallback = NewtonPostUpdateCallback function(const NewtonWorld* newtonWorld);
+    alias da_NewtonSetPostUpdateCallback = void function(const NewtonWorld* newtonWorld, NewtonPostUpdateCallback callback);
+
     alias da_NewtonAlloc = void* function(int sizeInBytes);
     alias da_NewtonFree = void function(void* ptr);
+
     alias da_NewtonLoadPlugins = void function(const NewtonWorld* newtonWorld, const char* plugInPath);
     alias da_NewtonUnloadPlugins = void function(const NewtonWorld* newtonWorld);
     alias da_NewtonCurrentPlugin = void* function(const NewtonWorld* newtonWorld);
@@ -48,26 +53,36 @@ extern(C) @nogc nothrow
     alias da_NewtonGetNextPlugin = void* function(const NewtonWorld* newtonWorld, const void* plugin);
     alias da_NewtonGetPluginString = const(char)* function(const NewtonWorld* newtonWorld, const void* plugin);
     alias da_NewtonSelectPlugin = void function(const NewtonWorld* newtonWorld, const void* plugin);
+
     alias da_NewtonGetContactMergeTolerance = dFloat function(const NewtonWorld* newtonWorld);
     alias da_NewtonSetContactMergeTolerance = void function(const NewtonWorld* newtonWorld, dFloat tolerance);
+
     alias da_NewtonInvalidateCache = void function(const NewtonWorld* newtonWorld);
+
     alias da_NewtonSetSolverIterations = void function(const NewtonWorld* newtonWorld, int model);
     alias da_NewtonGetSolverIterations = int function(const NewtonWorld* newtonWorld);
-    //alias da_NewtonSetMultiThreadSolverOnSingleIsland = void function(const NewtonWorld* newtonWorld, int mode);
-    //alias da_NewtonGetMultiThreadSolverOnSingleIsland = int function(const NewtonWorld* newtonWorld);
+
+    alias da_NewtonSetParallelSolverOnLargeIsland = void function(const NewtonWorld* newtonWorld, int mode);
+    alias da_NewtonGetParallelSolverOnLargeIsland = int function(const NewtonWorld* newtonWorld);
+
     alias da_NewtonGetBroadphaseAlgorithm = int function(const NewtonWorld* newtonWorld);
     alias da_NewtonSelectBroadphaseAlgorithm = void function(const NewtonWorld* newtonWorld, int algorithmType);
     alias da_NewtonResetBroadphase = void function(const NewtonWorld* newtonWorld);
+
     alias da_NewtonUpdate = void function(const NewtonWorld* newtonWorld, dFloat timestep);
     alias da_NewtonUpdateAsync = void function(const NewtonWorld* newtonWorld, dFloat timestep);
     alias da_NewtonWaitForUpdateToFinish = void function(const NewtonWorld* newtonWorld);
+
     alias da_NewtonGetNumberOfSubsteps = int function(const NewtonWorld* newtonWorld);
     alias da_NewtonSetNumberOfSubsteps = void function(const NewtonWorld* newtonWorld, int subSteps);
     alias da_NewtonGetLastUpdateTime = dFloat function(const NewtonWorld* newtonWorld);
+
     alias da_NewtonSerializeToFile = void function(const NewtonWorld* newtonWorld, const char* filename, NewtonOnBodySerializationCallback bodyCallback, const char* bodyUserData);
     alias da_NewtonDeserializeFromFile = void function(const NewtonWorld* newtonWorld, const char* filename, NewtonOnBodyDeserializationCallback bodyCallback, void* bodyUserData);
+    
     alias da_NewtonSerializeScene = void function(const NewtonWorld* newtonWorld, NewtonOnBodySerializationCallback bodyCallback, void* bodyUserData, NewtonSerializeCallback serializeCallback, void* serializeHandle);
     alias da_NewtonDeserializeScene = void function(const NewtonWorld* newtonWorld, NewtonOnBodyDeserializationCallback bodyCallback, void* bodyUserData, NewtonDeserializeCallback serializeCallback, void* serializeHandle);
+
     alias da_NewtonFindSerializedBody = NewtonBody* function(const NewtonWorld* newtonWorld, int bodySerializedID);
     alias da_NewtonSetJointSerializationCallbacks = void function(const NewtonWorld* newtonWorld, NewtonOnJointSerializationCallback serializeJoint, NewtonOnJointDeserializationCallback deserializeJoint);
     alias da_NewtonGetJointSerializationCallbacks = void function(const NewtonWorld* newtonWorld, NewtonOnJointSerializationCallback* serializeJoint, NewtonOnJointDeserializationCallback* deserializeJoint);
@@ -80,6 +95,8 @@ extern(C) @nogc nothrow
     alias da_NewtonGetMaxThreadsCount = int function(const NewtonWorld* newtonWorld);
     alias da_NewtonDispachThreadJob = void function(const NewtonWorld* newtonWorld, NewtonJobTask task, const void* usedData, const char* functionName);
     alias da_NewtonSyncThreadJobs = void function(const NewtonWorld* newtonWorld);
+
+    // Atomic operations
     alias da_NewtonAtomicAdd = int function(const int* ptr, int value);
     alias da_NewtonAtomicSwap = int function(const int* ptr, int value);
     alias da_NewtonYield = void function();
@@ -87,20 +104,29 @@ extern(C) @nogc nothrow
     alias da_NewtonSetIslandUpdateEvent = void function(const NewtonWorld* newtonWorld, NewtonIslandUpdate islandUpdate);
     alias da_NewtonWorldForEachJointDo = void function(const NewtonWorld* newtonWorld, NewtonJointIterator callback, void* userData);
     alias da_NewtonWorldForEachBodyInAABBDo = void function(const NewtonWorld* newtonWorld, const dFloat* p0, const dFloat* p1, NewtonBodyIterator callback, void* userData);
+
+    alias da_NewtonWorldSetUserData = void* function(const NewtonWorld* newtonWorld, void* userData);
     alias da_NewtonWorldGetUserData = void* function(const NewtonWorld* newtonWorld);
+
     alias da_NewtonWorldAddListener = void* function(const NewtonWorld* newtonWorld, const char* nameId, void* listenerUserData);
     alias da_NewtonWorldGetListener = void* function(const NewtonWorld* newtonWorld, const char* nameId);
+
+    alias da_NewtonWorldListenerSetDebugCallback =    void function (const NewtonWorld* newtonWorld, void* listener, NewtonWorldListenerDebugCallback callback);
+    alias da_NewtonWorldListenerSetPostStepCallback = void function (const NewtonWorld* newtonWorld, void* listener, NewtonWorldUpdateListenerCallback callback);
+    alias da_NewtonWorldListenerSetPreUpdateCallback  = void function (const NewtonWorld* newtonWorld, void* listener, NewtonWorldUpdateListenerCallback callback);
+    alias da_NewtonWorldListenerSetPostUpdateCallback =	void function (const NewtonWorld* newtonWorld, void* listener, NewtonWorldUpdateListenerCallback callback);
     alias da_NewtonWorldListenerSetDestructorCallback = void function(const NewtonWorld* newtonWorld, void* listener, NewtonWorldDestroyListenerCallback destroy);
-    alias da_NewtonWorldListenerSetPreUpdateCallback = void function(const NewtonWorld* newtonWorld, void* listener, NewtonWorldUpdateListenerCallback update);
-    alias da_NewtonWorldListenerSetPostUpdateCallback = void function(const NewtonWorld* newtonWorld, void* listener, NewtonWorldUpdateListenerCallback update);
-    alias da_NewtonWorldListenerSetDebugCallback = void function(const NewtonWorld* newtonWorld, void* listener, NewtonWorldListenerDebugCallback debugCallback);
     alias da_NewtonWorldListenerSetBodyDestroyCallback = void function(const NewtonWorld* newtonWorld, void* listener, NewtonWorldListenerBodyDestroyCallback bodyDestroyCallback);
     alias da_NewtonWorldListenerDebug = void function(const NewtonWorld* newtonWorld, void* context);
     alias da_NewtonWorldGetListenerUserData = void* function(const NewtonWorld* newtonWorld, void* listener);
     alias da_NewtonWorldListenerGetBodyDestroyCallback = NewtonWorldListenerBodyDestroyCallback function(const NewtonWorld* newtonWorld, void* listener);
+
     alias da_NewtonWorldSetDestructorCallback = void function(const NewtonWorld* newtonWorld, NewtonWorldDestructorCallback destructor);
     alias da_NewtonWorldGetDestructorCallback = NewtonWorldDestructorCallback function(const NewtonWorld* newtonWorld);
     alias da_NewtonWorldSetCollisionConstructorDestructorCallback = void function(const NewtonWorld* newtonWorld, NewtonCollisionCopyConstructionCallback constructor, NewtonCollisionDestructorCallback destructor);
+
+    alias da_NewtonWorldSetCreateDestroyContactCallback = void function(const NewtonWorld* newtonWorld, NewtonCreateContactCallback createContact, NewtonDestroyContactCallback destroyContact);
+
     alias da_NewtonWorldRayCast = void function(const NewtonWorld* newtonWorld, const dFloat* p0, const dFloat* p1, NewtonWorldRayFilterCallback filter, void* userData, NewtonWorldRayPrefilterCallback prefilter, int threadIndex);
     alias da_NewtonWorldConvexCast = int function(const NewtonWorld* newtonWorld, const dFloat* matrix, const dFloat* target, const NewtonCollision* shape, dFloat* param, void* userData, NewtonWorldRayPrefilterCallback prefilter, NewtonWorldConvexCastReturnInfo* info, int maxContactsCount, int threadIndex);
     alias da_NewtonWorldCollide = int function(const NewtonWorld* newtonWorld, const dFloat* matrix, const NewtonCollision* shape, void* userData, NewtonWorldRayPrefilterCallback prefilter, NewtonWorldConvexCastReturnInfo* info, int maxContactsCount, int threadIndex);
@@ -108,6 +134,8 @@ extern(C) @nogc nothrow
     // world utility functions
     alias da_NewtonWorldGetBodyCount = int function(const NewtonWorld* newtonWorld);
     alias da_NewtonWorldGetConstraintCount = int function(const NewtonWorld* newtonWorld);
+
+    alias da_NewtonWorldFindJoint = NewtonJoint* function(const NewtonBody* body0, const NewtonBody* body1);
 
     // Island
     alias da_NewtonIslandGetBody = NewtonBody* function(const void* island, int bodyIndex);
@@ -117,18 +145,26 @@ extern(C) @nogc nothrow
     alias da_NewtonMaterialCreateGroupID = int function(const NewtonWorld* newtonWorld);
     alias da_NewtonMaterialGetDefaultGroupID = int function(const NewtonWorld* newtonWorld);
     alias da_NewtonMaterialDestroyAllGroupID = void function(const NewtonWorld* newtonWorld);
+
     alias da_NewtonMaterialGetUserData = void* function(const NewtonWorld* newtonWorld, int id0, int id1);
     alias da_NewtonMaterialSetSurfaceThickness = void function(const NewtonWorld* newtonWorld, int id0, int id1, dFloat thickness);
+
     alias da_NewtonMaterialSetCallbackUserData = void function(const NewtonWorld* newtonWorld, int id0, int id1, void* userData);
     alias da_NewtonMaterialSetContactGenerationCallback = void function(const NewtonWorld* newtonWorld, int id0, int id1, NewtonOnContactGeneration contactGeneration);
     alias da_NewtonMaterialSetCompoundCollisionCallback = void function(const NewtonWorld* newtonWorld, int id0, int id1, NewtonOnCompoundSubCollisionAABBOverlap compoundAabbOverlap);
     alias da_NewtonMaterialSetCollisionCallback = void function(const NewtonWorld* newtonWorld, int id0, int id1, NewtonOnAABBOverlap aabbOverlap, NewtonContactsProcess process);
+
     alias da_NewtonMaterialSetDefaultSoftness = void function(const NewtonWorld* newtonWorld, int id0, int id1, dFloat value);
     alias da_NewtonMaterialSetDefaultElasticity = void function(const NewtonWorld* newtonWorld, int id0, int id1, dFloat elasticCoef);
     alias da_NewtonMaterialSetDefaultCollidable = void function(const NewtonWorld* newtonWorld, int id0, int id1, int state);
     alias da_NewtonMaterialSetDefaultFriction = void function(const NewtonWorld* newtonWorld, int id0, int id1, dFloat staticFriction, dFloat kineticFriction);
+
+    alias da_NewtonMaterialJointResetIntraJointCollision = void function (const NewtonWorld* newtonWorld, int id0, int id1);
+    alias da_NewtonMaterialJointResetSelftJointCollision = void function (const NewtonWorld* newtonWorld, int id0, int id1);
+
     alias da_NewtonWorldGetFirstMaterial = NewtonMaterial* function(const NewtonWorld* newtonWorld);
     alias da_NewtonWorldGetNextMaterial = NewtonMaterial* function(const NewtonWorld* newtonWorld, const NewtonMaterial* material);
+    
     alias da_NewtonWorldGetFirstBody = NewtonBody* function(const NewtonWorld* newtonWorld);
     alias da_NewtonWorldGetNextBody = NewtonBody* function(const NewtonWorld* newtonWorld, const NewtonBody* curBody);
 
@@ -617,7 +653,8 @@ __gshared
     da_NewtonCreate NewtonCreate;
     da_NewtonDestroy NewtonDestroy;
     da_NewtonDestroyAllBodies NewtonDestroyAllBodies;
-    //da_NewtonSetPosUpdateCallback NewtonSetPosUpdateCallback;
+    da_NewtonGetPostUpdateCallback NewtonGetPostUpdateCallback;
+    da_NewtonSetPostUpdateCallback NewtonSetPostUpdateCallback;
     da_NewtonAlloc NewtonAlloc;
     da_NewtonFree NewtonFree;
     da_NewtonLoadPlugins NewtonLoadPlugins;
@@ -633,8 +670,8 @@ __gshared
     da_NewtonInvalidateCache NewtonInvalidateCache;
     da_NewtonSetSolverIterations NewtonSetSolverIterations;
     da_NewtonGetSolverIterations NewtonGetSolverIterations;
-    //da_NewtonSetMultiThreadSolverOnSingleIsland NewtonSetMultiThreadSolverOnSingleIsland;
-    //da_NewtonGetMultiThreadSolverOnSingleIsland NewtonGetMultiThreadSolverOnSingleIsland;
+    da_NewtonSetParallelSolverOnLargeIsland NewtonSetParallelSolverOnLargeIsland;
+    da_NewtonGetParallelSolverOnLargeIsland NewtonGetParallelSolverOnLargeIsland;
     da_NewtonGetBroadphaseAlgorithm NewtonGetBroadphaseAlgorithm;
     da_NewtonSelectBroadphaseAlgorithm NewtonSelectBroadphaseAlgorithm;
     da_NewtonResetBroadphase NewtonResetBroadphase;
@@ -660,6 +697,8 @@ __gshared
     da_NewtonGetMaxThreadsCount NewtonGetMaxThreadsCount;
     da_NewtonDispachThreadJob NewtonDispachThreadJob;
     da_NewtonSyncThreadJobs NewtonSyncThreadJobs;
+    
+    // Atomic operations
     da_NewtonAtomicAdd NewtonAtomicAdd;
     da_NewtonAtomicSwap NewtonAtomicSwap;
     da_NewtonYield NewtonYield;
@@ -667,26 +706,37 @@ __gshared
     da_NewtonSetIslandUpdateEvent NewtonSetIslandUpdateEvent;
     da_NewtonWorldForEachJointDo NewtonWorldForEachJointDo;
     da_NewtonWorldForEachBodyInAABBDo NewtonWorldForEachBodyInAABBDo;
+    
+    da_NewtonWorldSetUserData NewtonWorldSetUserData;
     da_NewtonWorldGetUserData NewtonWorldGetUserData;
+    
     da_NewtonWorldAddListener NewtonWorldAddListener;
     da_NewtonWorldGetListener NewtonWorldGetListener;
-    da_NewtonWorldListenerSetDestructorCallback NewtonWorldListenerSetDestructorCallback;
+    
+    da_NewtonWorldListenerSetDebugCallback NewtonWorldListenerSetDebugCallback;
+    da_NewtonWorldListenerSetPostStepCallback NewtonWorldListenerSetPostStepCallback;
     da_NewtonWorldListenerSetPreUpdateCallback NewtonWorldListenerSetPreUpdateCallback;
     da_NewtonWorldListenerSetPostUpdateCallback NewtonWorldListenerSetPostUpdateCallback;
-    da_NewtonWorldListenerSetDebugCallback NewtonWorldListenerSetDebugCallback;
+    da_NewtonWorldListenerSetDestructorCallback NewtonWorldListenerSetDestructorCallback;
     da_NewtonWorldListenerSetBodyDestroyCallback NewtonWorldListenerSetBodyDestroyCallback;
     da_NewtonWorldListenerDebug NewtonWorldListenerDebug;
     da_NewtonWorldGetListenerUserData NewtonWorldGetListenerUserData;
     da_NewtonWorldListenerGetBodyDestroyCallback NewtonWorldListenerGetBodyDestroyCallback;
+    
     da_NewtonWorldSetDestructorCallback NewtonWorldSetDestructorCallback;
     da_NewtonWorldGetDestructorCallback NewtonWorldGetDestructorCallback;
     da_NewtonWorldSetCollisionConstructorDestructorCallback NewtonWorldSetCollisionConstructorDestructorCallback;
+    
+    da_NewtonWorldSetCreateDestroyContactCallback NewtonWorldSetCreateDestroyContactCallback;
+    
     da_NewtonWorldRayCast NewtonWorldRayCast;
     da_NewtonWorldConvexCast NewtonWorldConvexCast;
     da_NewtonWorldCollide NewtonWorldCollide;
     
     da_NewtonWorldGetBodyCount NewtonWorldGetBodyCount;
     da_NewtonWorldGetConstraintCount NewtonWorldGetConstraintCount;
+    
+    da_NewtonWorldFindJoint NewtonWorldFindJoint;
     
     // Island
     da_NewtonIslandGetBody NewtonIslandGetBody;
@@ -706,6 +756,8 @@ __gshared
     da_NewtonMaterialSetDefaultElasticity NewtonMaterialSetDefaultElasticity;
     da_NewtonMaterialSetDefaultCollidable NewtonMaterialSetDefaultCollidable;
     da_NewtonMaterialSetDefaultFriction NewtonMaterialSetDefaultFriction;
+    da_NewtonMaterialJointResetIntraJointCollision NewtonMaterialJointResetIntraJointCollision;
+    da_NewtonMaterialJointResetSelftJointCollision NewtonMaterialJointResetSelftJointCollision;
     da_NewtonWorldGetFirstMaterial NewtonWorldGetFirstMaterial;
     da_NewtonWorldGetNextMaterial NewtonWorldGetNextMaterial;
     da_NewtonWorldGetFirstBody NewtonWorldGetFirstBody;
