@@ -1092,24 +1092,6 @@ extern(C) @nogc nothrow __gshared
     alias da_NewtonBallSetConeLimits =  void function(const NewtonJoint* ball, const dFloat* pin,  dFloat maxConeAngle,  dFloat maxTwistAngle);
     da_NewtonBallSetConeLimits NewtonBallSetConeLimits;
 
-    alias da_NewtonConstraintCreateHinge =  NewtonJoint* function(const NewtonWorld* newtonWorld, const dFloat* pivotPoint, const dFloat* pinDir, const NewtonBody* childBody, const NewtonBody* parentBody);
-    da_NewtonConstraintCreateHinge NewtonConstraintCreateHinge;
-
-    alias da_NewtonHingeSetUserCallback =  void function(const NewtonJoint* hinge,  NewtonHingeCallback callback);
-    da_NewtonHingeSetUserCallback NewtonHingeSetUserCallback;
-
-    alias da_NewtonHingeGetJointAngle =  dFloat function(const NewtonJoint* hinge);
-    da_NewtonHingeGetJointAngle NewtonHingeGetJointAngle;
-
-    alias da_NewtonHingeGetJointOmega =  dFloat function(const NewtonJoint* hinge);
-    da_NewtonHingeGetJointOmega NewtonHingeGetJointOmega;
-
-    alias da_NewtonHingeGetJointForce =  void function(const NewtonJoint* hinge,  dFloat* force);
-    da_NewtonHingeGetJointForce NewtonHingeGetJointForce;
-
-    alias da_NewtonHingeCalculateStopAlpha =  dFloat function(const NewtonJoint* hinge, const NewtonHingeSliderUpdateDesc* desc,  dFloat angle);
-    da_NewtonHingeCalculateStopAlpha NewtonHingeCalculateStopAlpha;
-
     alias da_NewtonConstraintCreateSlider =  NewtonJoint* function(const NewtonWorld* newtonWorld, const dFloat* pivotPoint, const dFloat* pinDir, const NewtonBody* childBody, const NewtonBody* parentBody);
     da_NewtonConstraintCreateSlider NewtonConstraintCreateSlider;
 

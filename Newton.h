@@ -1088,13 +1088,15 @@ extern "C" {
 	// Hinge joint functions
 	//
 	// **********************************************************************************************
+    /*
 	NEWTON_API NewtonJoint* NewtonConstraintCreateHinge (const NewtonWorld* const newtonWorld, const dFloat* pivotPoint, const dFloat* pinDir, const NewtonBody* const childBody, const NewtonBody* const parentBody);
 	NEWTON_API void NewtonHingeSetUserCallback (const NewtonJoint* const hinge, NewtonHingeCallback callback);
 	NEWTON_API dFloat NewtonHingeGetJointAngle (const NewtonJoint* const hinge);
 	NEWTON_API dFloat NewtonHingeGetJointOmega (const NewtonJoint* const hinge);
 	NEWTON_API void NewtonHingeGetJointForce (const NewtonJoint* const hinge, dFloat* const force);
 	NEWTON_API dFloat NewtonHingeCalculateStopAlpha (const NewtonJoint* const hinge, const NewtonHingeSliderUpdateDesc* const desc, dFloat angle);
-
+    */
+    
 	// **********************************************************************************************
 	//
 	// Slider joint functions
