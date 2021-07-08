@@ -23,3 +23,10 @@ docs/
 # Editor files
 .vs
 
+# Python files
+__pycache__/
+pyclibrary/
+pyparsing.py
+
+# Parser cache
+Newton.h.cache
